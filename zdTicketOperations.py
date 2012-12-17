@@ -1,29 +1,42 @@
 #!/usr/bin/python
 
-import requests, json, os, argparse, ast
+import requests, json, os
 
-parser = argparse.ArgumentParser(add_help=True, description='Create and get Zendesk tickets with Python')
-parser.add_argument("-g", "--get", action='store_true', help="Gets tickets from your Zendesk instance")
+################################################################
+## TICKETS
+################################################################
 
-subparsers = parser.add_subparsers(help='commands')
+# Get Tickets
+get_url = 'https://thegizzle.zendesk.com/api/v2/tickets.json'
+headers = {'Accept':'application/json'}
+get = requests.get(get_url, auth=(os.environ['ZD_USER'], os.environ['ZD_PASS']), headers=headers)
+print get.headers
+print get.text
 
 # Create Ticket
-create_parser = subparsers.add_parser('create', help='Creates new Zendesk ticket')
-create_parser.add_argument("-d", "--create-data", action='store', type=ast.literal_eval, required=True, help="JSON string that stores ticket data. Remember to escape your quotation marks with a backslash(\).")
+create_url = 'https://thegizzle.zendesk.com/api/v2/tickets.json'
+headers = {'Accept':'application/json', 'Content-Type':'application/json'}
+create_data = {"ticket":{"subject":"My printer is on fire!", "comment": { "body": "The smoke is very colorful." }}}
+create = requests.post(create_url, auth=(os.environ['ZD_USER'], os.environ['ZD_PASS']), data=json.dumps(create_data), headers=headers)
+print create.headers
+print create.text
 
-args = parser.parse_args()
+# Update Ticket
+update_url = 'https://thegizzle.zendesk.com/api/v2/tickets/123.json'
+headers = {'Accept':'application/json', 'Content-Type':'application/json'}
+update_data = {"ticket":{"status":"pending","comment":{"public":"true", "body": "Thanks, this is now updated!"}}}
+update = requests.put(update_url, auth=(os.environ['ZD_USER'], os.environ['ZD_PASS']), data=json.dumps(update_data), headers=headers)
+print update.headers
+print update.text
 
-if args.get:
-  get_url = 'https://thegizzle.zendesk.com/api/v2/tickets.json'
-  headers = {'Accept':'application/json'}
-  get = requests.get(get_url, auth=(os.environ['ZD_USER'], os.environ['ZD_PASS']), headers=headers)
-  print get.status_code
-  print get.text
+# Create Ticket w/ New Requester
+request_url = 'https://thegizzle.zendesk.com/api/v2/tickets.json'
+headers = {'Accept':'application/json', 'Content-Type':'application/json'}
+request_data = {"ticket": {"subject": "Hello","comment": { "body": "Some question" },"requester": { "locale_id": 8, "name": "Pablo", "email": "pablito@example.org" }}}
+request = requests.post(request_url, auth=(os.environ['ZD_USER'], os.environ['ZD_PASS']), data=json.dumps(request_data), headers=headers)
+print request.headers
+print request.text
 
-elif args.create_data:
-  create_url = 'https://thegizzle.zendesk.com/api/v2/tickets.json'
-  headers = {'Accept':'application/json', 'Content-Type':'application/json'}
-  create_data = args.create_data
-  create = requests.post(create_url, auth=(os.environ['ZD_USER'], os.environ['ZD_PASS']), data=json.dumps(create_data), headers=headers)
-  print create.status_code
-  print create.text
+################################################################
+## USERS
+################################################################
