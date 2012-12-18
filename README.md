@@ -1,18 +1,32 @@
 These are simple examples for using Python to consume the Zendesk API. Make sure your ZD_USER and ZD_PASS environment variables are set before using this.
 
+## On Mac
+
+```
+export ZD_USER='user@example.com'
+export ZD_PASS='password'
+```
+
+## On Windows
+
+```
+set ZD_USER=user@example.com
+set ZD_PASS=password
+```
+
 I've used the Requests library to do all my HTTP communication so if you need to do more complex operations check it out: <http://docs.python-requests.org/en/latest/>.
 
 In the code, I've done basic CRUD operations for Tickets and Users. If you'd like to see more, email me at <api@zendesk.com>. These should be pretty self explanatory.
 
 Make sure you change up all the variable names to your instance inside the code before running 
 
-Usage:
+## Usage:
 
 ```
 python zdTicketOperations.py
 ```
 
-Sample Output:
+## Sample Output:
 
 ```
 {"url":"https://thegizzle.zendesk.com/api/v2/users/311469541.json","id":311469541,"external_id":null,"name":"Pablo","alias":null,"created_at":"2012-12-17T23:42:48Z","updated_at":"2012-12-17T23:42:48Z","active":true,"verified":false,"shared":false,"locale_id":null,"locale":"en-US","time_zone":"Pacific Time (US & Canada)","last_login_at":null,"email":"pablito@example.org","phone":null,"signature":null,"details":null,"notes":null,"organization_id":null,"role":"end-user","custom_role_id":null,"moderator":false,"ticket_restriction":"requested","only_private_comments":false,"tags":[],"suspended":false,"photo":null}],"next_page":null,"previous_page":null,"count":13}
